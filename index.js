@@ -27,9 +27,24 @@ async function run() {
         const database = client.db("Tourism");
         const ourDivions = database.collection('divisions');
         const ourPlaces = database.collection('places');
-        const users = database.collection('users');
+        const usersCollection = database.collection('users');
+        const reviewCollection = database.collection('reviewCollection');
 
 
+        // get all divisions 
+        app.get('/divisions', async (req, res) => {
+            res.send(await ourDivions.find({}).toArray());
+        })
+
+        // get all places 
+        app.get('/places', async (req, res) => {
+            res.send(await ourPlaces.find({}).toArray());
+        });
+
+        // get user review 
+        app.get('/review', async (req, res) => {
+            res.send(await reviewCollection.find({}).toArray());
+        });
 
         // saver user
         app.post('/users', async (req, res) => {
