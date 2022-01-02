@@ -29,6 +29,7 @@ async function run() {
         const ourPlaces = database.collection('places');
         const usersCollection = database.collection('users');
         const reviewCollection = database.collection('reviewCollection');
+        const singlePlace = database.collection('singlePlace');
 
 
         // get all divisions 
@@ -39,6 +40,10 @@ async function run() {
         // get all places 
         app.get('/places', async (req, res) => {
             res.send(await ourPlaces.find({}).toArray());
+        });
+        // get all places 
+        app.get('/singlePlace', async (req, res) => {
+            res.send(await singlePlace.find({}).toArray());
         });
 
         // get user review 
