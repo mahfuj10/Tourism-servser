@@ -68,8 +68,6 @@ async function run() {
             res.json(result);
         });
 
-        // parent id  
-
 
         // single places with _id
         app.get('/places/:id', async (req, res) => {
@@ -79,9 +77,10 @@ async function run() {
             res.send(singleProduct);
         });
 
+        // parent id
         app.get('/place/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { parentId: id };
+            const query = { parentID: id };
             const place = await ourPlaces.find(query).toArray();
             res.send(place);
         });
