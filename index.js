@@ -68,6 +68,24 @@ async function run() {
             res.json(result);
         });
 
+        // parent id  
+
+
+        // single places with _id
+        app.get('/places/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const singleProduct = await ourPlaces.findOne(query);
+            res.send(singleProduct);
+        });
+
+        app.get('/place/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { parentId: id };
+            const place = await ourPlaces.find(query).toArray();
+            res.send(place);
+        });
+
 
     }
     finally {
