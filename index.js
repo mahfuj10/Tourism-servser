@@ -91,6 +91,25 @@ async function run() {
             res.send(place);
         });
 
+        // make admin
+        app.put('/users/admin', async (req, res) => {
+            const user = req.body;
+            const filter = { email: user.email };
+            const updateDoc = { $set: { role: "admin" } };
+            const result = await usersCollection.updateOne(filter, updateDoc);
+            res.json(result);
+        });
+
+        // get admin status
+        app.get('/users/:email', async (req, res) => {
+            const user = await usersCollection.findOne({ email: req.params.email });
+            let Admin = false;
+            if (user?.role === 'admin') {
+                Admin = true;
+            };
+            res.json({ Admin: Admin });
+        });
+
 
     }
     finally {
