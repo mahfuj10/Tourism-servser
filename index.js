@@ -50,6 +50,12 @@ async function run() {
         app.get('/review', async (req, res) => {
             res.send(await reviewCollection.find({}).toArray());
         });
+        // get user review 
+        app.get('/review', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+            res.send(result)
+        });
 
         // saver user
         app.post('/users', async (req, res) => {
