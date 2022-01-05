@@ -64,11 +64,34 @@ async function run() {
             const result = await usersCollection.insertOne(user);
             res.send(result);
         });
-        // saver user
+        // post order
         app.post('/order', async (req, res) => {
             const order = req.body;
             const result = await orderCollection.insertOne(order);
             res.send(result);
+        });
+
+        // get cart product with email
+        app.get('/order/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = await orderCollection.find(query).toArray();
+            res.send(result);
+        });
+        // get cart product with ui
+        app.get('/order/:uid', async (req, res) => {
+            const uid = req.params.email;
+            const query = { uid: uid };
+            const result = await orderCollection.find(query).toArray();
+            res.send(result);
+        });
+
+        // delete cart api
+        app.delete('/order/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await orderCollection.deleteOne(query);
+            res.json(result);
         });
 
         // save user google sign
