@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
+const stripe = require('stripe')(process.env.STRIPE_SECRET);
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const fileUpload = require('express-fileupload');
@@ -139,6 +140,33 @@ async function run() {
             };
             res.json({ Admin: Admin });
         });
+
+
+        // stripe payment gatway
+        app.post('/createPayment', async (req, res) => {
+            const paymentInfo = req.body;
+            const amount = paymentInfo.price * 100;
+            const paymentIntent = await stripe.paymentIntents.create({
+                currency: 'usd',
+                amount: amount,
+                payment_method_types: ['card']
+            });
+            res.json({ clientSecret: paymentIntent.client_secret })
+        });
+
+        // set payment status
+        app.put('/cartProducts/:email', async (req, res) => {
+            const email = req.params.email;
+            const payment = req.body;
+            const filter = { email: email };
+            const updateDoc = {
+                $set: {
+                    payment: payment
+                }
+            };
+            const result = await orderCollection.updateMany(filter, updateDoc);
+            res.json(result);
+        })
 
 
     }
