@@ -86,6 +86,10 @@ async function run() {
             const result = await orderCollection.find(query).toArray();
             res.send(result);
         });
+        // get cart product with ui
+        app.get('/manageorder', async (req, res) => {
+            res.send(await orderCollection.find({}).toArray());
+        });
 
         // delete cart api
         app.delete('/order/:id', async (req, res) => {
@@ -155,13 +159,14 @@ async function run() {
         });
 
         // set payment status
-        app.put('/cartProducts/:email', async (req, res) => {
-            const email = req.params.email;
+        app.put('/cartProducts/:id', async (req, res) => {
+            const id = req.params.id;
             const payment = req.body;
-            const filter = { email: email };
+            const filter = { _id: ObjectId(id) };
+            // const filter = { email: email };
             const updateDoc = {
                 $set: {
-                    payment: payment
+                    isPaid: true
                 }
             };
             const result = await orderCollection.updateMany(filter, updateDoc);
