@@ -30,6 +30,7 @@ async function run() {
         const usersCollection = database.collection('users');
         const reviewCollection = database.collection('reviewCollection');
         const singlePlace = database.collection('singlePlace');
+        const orderCollection = database.collection('orders');
 
 
         // get all divisions 
@@ -61,6 +62,12 @@ async function run() {
         app.post('/users', async (req, res) => {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
+            res.send(result);
+        });
+        // saver user
+        app.post('/order', async (req, res) => {
+            const order = req.body;
+            const result = await orderCollection.insertOne(order);
             res.send(result);
         });
 
