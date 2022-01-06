@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
-const stripe = require('stripe')(process.env.STRIPE_SECRET);
+const stripe = require('stripe')('sk_test_51K93ltBcGooWtax9GkAGLr4DEmlZNpm6tUa0SLImClKgGZFpYehHv9XhvOAf5escrbFzko1UJ1bbecG02hdCCZZu00K0yXRB8H');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const fileUpload = require('express-fileupload');
@@ -147,7 +147,7 @@ async function run() {
 
 
         // stripe payment gatway
-        app.post('/createPayment', async (req, res) => {
+        app.post('/payment', async (req, res) => {
             const paymentInfo = req.body;
             const amount = paymentInfo.price * 100;
             const paymentIntent = await stripe.paymentIntents.create({
@@ -159,17 +159,17 @@ async function run() {
         });
 
         // set payment status
-        app.put('/cartProducts/:id', async (req, res) => {
-            const id = req.params.id;
+        app.put('/cartProducts/:tourId', async (req, res) => {
+            const tourId = req.params.tourId;
             const payment = req.body;
-            const filter = { _id: ObjectId(id) };
+            const filter = { tourId: tourId };
             // const filter = { email: email };
             const updateDoc = {
                 $set: {
-                    isPaid: true
+                    isPaid: payment.isPaid
                 }
             };
-            const result = await orderCollection.updateMany(filter, updateDoc);
+            const result = await orderCollection.updateOne(filter, updateDoc);
             res.json(result);
         })
 
