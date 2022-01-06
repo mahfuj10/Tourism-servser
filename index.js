@@ -71,6 +71,12 @@ async function run() {
             const result = await orderCollection.insertOne(order);
             res.send(result);
         });
+        // post place
+        app.post('/place', async (req, res) => {
+            const place = req.body;
+            const result = await ourPlaces.insertOne(place);
+            res.send(result);
+        });
 
         // get cart product with email
         app.get('/order/:email', async (req, res) => {
@@ -90,6 +96,7 @@ async function run() {
         app.get('/manageorder', async (req, res) => {
             res.send(await orderCollection.find({}).toArray());
         });
+
 
         // delete cart api
         app.delete('/order/:id', async (req, res) => {
